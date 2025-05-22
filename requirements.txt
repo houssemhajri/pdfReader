@@ -1,9 +1,9 @@
 fastapi
 uvicorn
-sentence-transformers==2.2.2
-huggingface-hub==0.14.1
+huggingface-hub
 faiss-cpu
 PyMuPDF
 requests
 openai
 python-multipart
+sentence-transformers
