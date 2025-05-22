@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+sentence-transformers==2.2.2
+faiss-cpu
+PyMuPDF
+requests
+openai
