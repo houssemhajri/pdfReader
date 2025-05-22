@@ -8,7 +8,7 @@ import openai
 
 # Config Groq
 openai.api_base = "https://api.groq.com/openai/v1"
-openai.api_key = os.getenv("GROQ_API_KEY")
+openai.api_key = "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"
 
 def split_text(text, chunk_size=500):
     return [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
@@ -18,7 +18,7 @@ def process_pdf(file_path):
         text = "\n".join(page.get_text() for page in doc)
 
     chunks = split_text(text)
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    model = SentenceTransformer('./my-custom-model')
     embeddings = model.encode(chunks, show_progress_bar=True)
 
     dim = embeddings.shape[1]
@@ -38,7 +38,7 @@ def search_similar_chunks(query, k=5):
         texts = pickle.load(f)
 
     index = faiss.read_index("data/index.faiss")
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    model = SentenceTransformer('./my-custom-model')
 
     query_embedding = model.encode([query])
     D, I = index.search(np.array(query_embedding), k)
