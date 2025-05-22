@@ -6,3 +6,4 @@ faiss-cpu
 PyMuPDF
 requests
 openai
+python-multipart
