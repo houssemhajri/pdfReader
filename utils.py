@@ -3,14 +3,24 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
 import pickle
-import os
 import openai
+from dotenv import load_dotenv
+
+load_dotenv()
+
+import os
 
 
 # Config Groq
 openai.api_base = "https://api.groq.com/openai/v1"
-openai.api_key = "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"
-client = openai.OpenAI(api_key=openai.api_key, base_url=openai.api_base)
+api_key = os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    print("❌ Clé API non trouvée. Assurez-vous que le fichier .env existe et contient OPENAI_API_KEY.")
+else:
+    print("✅ Clé API détectée.")
+
+client = openai.OpenAI(api_key=api_key, base_url=openai.api_base)
 
 
 
