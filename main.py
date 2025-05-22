@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from utils import process_pdf, search_similar_chunks, ask_llm
 import os
+from sentence_transformers import SentenceTransformer, models
 
 app = FastAPI()
 
@@ -13,6 +14,23 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# 1. Transformer de base (petit modèle)
+word_embedding_model = models.Transformer('distilbert-base-uncased')
+
+# 2. Pooling (pour extraire une seule vector par phrase)
+pooling_model = models.Pooling(
+    word_embedding_model.get_word_embedding_dimension(),
+    pooling_mode_mean_tokens=True,
+    pooling_mode_cls_token=False,
+    pooling_mode_max_tokens=False
+)
+
+# 3. Assemble en SentenceTransformer
+model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
+
+# 4. Sauvegarder le modèle custom
+model.save('./my-custom-model')
 
 @app.post("/upload")
 async def upload_pdf(file: UploadFile = File(...)):
