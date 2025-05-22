@@ -6,3 +6,4 @@ sentence-transformers
 faiss-cpu
 requests
 python-multipart
+hf_xet
