@@ -6,9 +6,14 @@ import pickle
 import os
 import openai
 
+
 # Config Groq
 openai.api_base = "https://api.groq.com/openai/v1"
-openai.api_key = "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"
+openai.api_key = "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"
+client = openai.OpenAI(api_key=openai.api_key, base_url=openai.api_base)
+
+
+
 
 def split_text(text, chunk_size=500):
     return [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
@@ -47,7 +52,7 @@ def search_similar_chunks(query, k=5):
 
 def ask_llm(question, context):
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="llama3-8b-8192",
             messages=[
                 {"role": "system", "content": "Tu es un assistant qui répond uniquement à partir du contexte fourni."},
@@ -55,7 +60,8 @@ def ask_llm(question, context):
             ],
             temperature=0.3
         )
-        return response['choices'][0]['message']['content'].strip()
+        return response.choices[0].message.content.strip()
     except Exception as e:
-        print("❌ Erreur Groq:", e)
-        return "Erreur lors de la réponse LLM."
+        import traceback
+        traceback.print_exc()
+        return f"Erreur LLM: {str(e)}"
